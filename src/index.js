@@ -1,6 +1,8 @@
-import { GoogleSpreadsheet } from 'google-spreadsheet';
-import { JWT } from 'google-auth-library';
+
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { JWT } = require('google-auth-library');
 const fs = require('fs');
+const { strict } = require('assert');
 
 const SPREADSHEET_ID = '1vucTAdf8cSq5FisJWuWxt4nXdjRTinPQZYd8ZQ8g1rE'
 
@@ -17,18 +19,41 @@ const SPREADSHEET_ID = '1vucTAdf8cSq5FisJWuWxt4nXdjRTinPQZYd8ZQ8g1rE'
 //   ],
 // });
 
-const serviceAccountAuth = JSON.parse(fs.readFileSync('ssh-vpn.json'));
 
-const doc = new GoogleSpreadsheet('<the sheet ID from the url>', serviceAccountAuth);
 
-await doc.loadInfo(); // loads document properties and worksheets
-console.log(doc.title);
-await doc.updateProperties({ title: 'renamed doc' });
+const account = JSON.parse(fs.readFileSync('ssh-vpn.json'));
 
-const sheet = doc.sheetsByIndex[0]; // or use `doc.sheetsById[id]` or `doc.sheetsByTitle[title]`
-console.log(sheet.title);
-console.log(sheet.rowCount);
+const serviceAccountAuth = new JWT({
+  email: account.client_email,
+  key: account.private_key,
+  scopes: ['https://www.googleapis.com/auth/spreadsheets']
+});
 
-// adding / removing sheets
-const newSheet = await doc.addSheet({ title: 'another sheet' });
-await newSheet.delete();
+
+const doc = new GoogleSpreadsheet(SPREADSHEET_ID, serviceAccountAuth);
+
+doc.loadInfo().then(() => {
+  console.log(doc.title);
+});
+
+
+// await doc.updateProperties({ title: 'renamed doc' });
+
+// const sheet = doc.sheetsByIndex[0]; // or use `doc.sheetsById[id]` or `doc.sheetsByTitle[title]`
+// console.log(sheet.title);
+// console.log(sheet.rowCount);
+
+// // adding / removing sheets
+// const newSheet = await doc.addSheet({ title: 'another sheet' });
+// await newSheet.delete();
+
+const main = async () => {
+
+    const sheet = doc.sheetsByIndex[0];
+    const rows = await sheet.getRows(); // can pass in { limit, offset }
+    console.log(rows[0].name);
+    console.log(rows[0].email);
+    console.log(rows[0].message);
+    console.log(rows[0].date);
+    console.log(rows[0].time);
+}
