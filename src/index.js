@@ -2,11 +2,15 @@ const { GoogleSpreadsheet } = require('google-spreadsheet');
 const { JWT } = require('google-auth-library');
 const fs = require('fs');
 const Fuse = require('../lib/fuse');
+const TelegramBot = require('node-telegram-bot-api');
 const { strict } = require('assert');
 
+
+const BOT_TOKEN = '6463257783:AAE1favGh3wgs0RMQw_vSuLyOrBVjhYMLqE';
 const SPREADSHEET_ID = '1vucTAdf8cSq5FisJWuWxt4nXdjRTinPQZYd8ZQ8g1rE'
 
-const authenticate = async function() {
+
+const google_authenticate = async function() {
   const account = JSON.parse(fs.readFileSync('ssh-vpn.json'));
 
   const serviceAccountAuth = new JWT({
@@ -68,8 +72,8 @@ function findItem(itemData, searchQuery) {
   };
 }
 
-const main = async function() {
-  const serviceAccountAuth = await authenticate();
+const loadData = async function() {
+  const serviceAccountAuth = await google_authenticate();
   const doc = new GoogleSpreadsheet(SPREADSHEET_ID, serviceAccountAuth);
   await doc.loadInfo(); // loads document properties and worksheets
   console.log("Loaded doc: " + doc.title);
@@ -79,12 +83,9 @@ const main = async function() {
   console.log("Loaded sheet: " + sheetData.title);
   console.log("Loaded cell: " + sheetData.cellStats.total);
 
-  // const TestData = sheetData.data.find(item => item.Name === "Aptamil");
-
-  // console.log(TestData)
-
-  const test = findItem(sheetData.data, "amajon");
-  console.log(test.text);
+  return sheetData.data;
 }
 
-main();
+module.exports = {loadData, findItem};
+
+
