@@ -2,7 +2,7 @@
 
 const TelegramBot = require('node-telegram-bot-api');
 const {loadData, findItem} = require('./index');
-
+const fs = require('fs');
 
 const BOT_TOKEN = '6463257783:AAE1favGh3wgs0RMQw_vSuLyOrBVjhYMLqE';
 const bot = new TelegramBot(BOT_TOKEN, {polling: true});
@@ -30,6 +30,13 @@ loadData().then((data) => {
 
         // Log the message to the console
         const timestamp = new Date().toLocaleString();
-        console.log(`${timestamp} - Username: ${username}, Message: ${messageText}`);
+        const logMessage = `[${timestamp}] Username: ${username}, Message: ${messageText}\n`;
+        console.log(logMessage);
+
+        fs.appendFile('chat.log', logMessage, (err) => {
+            if (err) {
+                console.error("Error writing to log file: ", err);
+            }
+        });
     });
 });
