@@ -10,7 +10,7 @@ const BOT_TOKEN = '6463257783:AAE1favGh3wgs0RMQw_vSuLyOrBVjhYMLqE';
 const SPREADSHEET_ID = '1vucTAdf8cSq5FisJWuWxt4nXdjRTinPQZYd8ZQ8g1rE'
 
 const google_authenticate = async function () {
-  const account = JSON.parse(fs.readFileSync('ssh-vpn.json'));
+  const account = JSON.parse(fs.readFileSync('private.json'));
 
   const serviceAccountAuth = new JWT({
     email: account.client_email,
