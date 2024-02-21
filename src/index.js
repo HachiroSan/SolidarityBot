@@ -50,7 +50,7 @@ const fetchSheetData = async function (doc, range) {
 const findItem = async function(itemData, searchQuery) {
   const fuseOptions = {
     keys: ["Name"],
-    threshold: 0.70
+    threshold: 0.30
   };
 
   const fuse = new Fuse(itemData, fuseOptions);
