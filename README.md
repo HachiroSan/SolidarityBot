@@ -16,7 +16,7 @@ A Telegram bot that provides information to users about companies contributing t
 
 ### Installation (Docker)
 1. Build the image `docker build -t solidarity .`
-2. Run container `docker run -d solidary:latest`
+2. Run container `docker run -d solidarity:latest`
 
 ### Usage
 1. Use the following command to start the application: `npm start`.
