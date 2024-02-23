@@ -6,7 +6,7 @@ const fs = require('fs');
 const Fuse = require('../lib/fuse');
 const TelegramBot = require('node-telegram-bot-api');
 
-const BOT_TOKEN = '6463257783:AAE1favGh3wgs0RMQw_vSuLyOrBVjhYMLqE';
+const BOT_TOKEN = 'INSERT BOT TOKEN HERE';
 const SPREADSHEET_ID = '1vucTAdf8cSq5FisJWuWxt4nXdjRTinPQZYd8ZQ8g1rE'
 
 const google_authenticate = async function () {
