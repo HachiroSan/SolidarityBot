@@ -21,7 +21,7 @@ const google_authenticate = async function () {
 }
 
 // Environment variables
-const SHEET_RANGE = process.env.SHEET_RANGE|| 100;
+const SHEET_RANGE = process.env.SHEET_RANGE || 100;
 
 
 const fetchSheetData = async function (doc, range) {
