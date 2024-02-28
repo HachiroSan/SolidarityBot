@@ -6,7 +6,6 @@ const fs = require('fs');
 const Fuse = require('../lib/fuse');
 const TelegramBot = require('node-telegram-bot-api');
 
-const BOT_TOKEN = 'INSERT BOT TOKEN HERE';
 const SPREADSHEET_ID = '1vucTAdf8cSq5FisJWuWxt4nXdjRTinPQZYd8ZQ8g1rE'
 
 const google_authenticate = async function () {
@@ -21,6 +20,10 @@ const google_authenticate = async function () {
   return serviceAccountAuth;
 }
 
+// Environment variables
+const MAX_RANGE = process.env.BOT_TOKEN || 100;
+
+
 const fetchSheetData = async function (doc, range) {
   const sheet = doc.sheetsByIndex[0];
 
@@ -28,7 +31,7 @@ const fetchSheetData = async function (doc, range) {
 
   let dataArray = [];
 
-  for (let row = 1; row < 150; row++) {
+  for (let row = 1; row < MAX_RANGE; row++) {
     let data = {
       "Name": sheet.getCell(row, 0).value,
       "Category": sheet.getCell(row, 1).value,
@@ -77,7 +80,7 @@ const loadData = async function () {
   await doc.loadInfo(); // loads document properties and worksheets
   console.log("Loaded doc: " + doc.title);
 
-  const sheetData = await fetchSheetData(doc, 'A1:E150');
+  const sheetData = await fetchSheetData(doc, `A1:E${MAX_RANGE}`);
 
   console.log("Loaded sheet: " + sheetData.title);
   console.log("Loaded cell: " + sheetData.cellStats.total + " cells\n");

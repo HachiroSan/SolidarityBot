@@ -4,7 +4,13 @@ const TelegramBot = require('node-telegram-bot-api');
 const {loadData, findItem} = require('./index');
 const fs = require('fs');
 
-const BOT_TOKEN = '6463257783:AAE1favGh3wgs0RMQw_vSuLyOrBVjhYMLqE';
+// Environment variables
+const BOT_TOKEN = process.env.BOT_TOKEN || undefined;
+
+if (BOT_TOKEN === undefined) {
+    console.error("BOT_TOKEN is not defined");
+    process.exit(1);
+}
 const bot = new TelegramBot(BOT_TOKEN, {polling: true});
 
 let sheetData;
