@@ -21,7 +21,7 @@ const google_authenticate = async function () {
 }
 
 // Environment variables
-const MAX_RANGE = process.env.BOT_TOKEN || 100;
+const SHEET_RANGE = process.env.SHEET_RANGE|| 100;
 
 
 const fetchSheetData = async function (doc, range) {
@@ -31,7 +31,7 @@ const fetchSheetData = async function (doc, range) {
 
   let dataArray = [];
 
-  for (let row = 1; row < MAX_RANGE; row++) {
+  for (let row = 1; row < SHEET_RANGE; row++) {
     let data = {
       "Name": sheet.getCell(row, 0).value,
       "Category": sheet.getCell(row, 1).value,
@@ -80,7 +80,7 @@ const loadData = async function () {
   await doc.loadInfo(); // loads document properties and worksheets
   console.log("Loaded doc: " + doc.title);
 
-  const sheetData = await fetchSheetData(doc, `A1:E${MAX_RANGE}`);
+  const sheetData = await fetchSheetData(doc, `A1:E${SHEET_RANGE}`);
 
   console.log("Loaded sheet: " + sheetData.title);
   console.log("Loaded cell: " + sheetData.cellStats.total + " cells\n");
