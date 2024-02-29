@@ -36,7 +36,7 @@ const fetchSheetData = async function (doc, range) {
   await sheet.loadCells(range);
 
   let dataArray = [];
-  
+
   for (let row = 1; row < SHEET_RANGE; row++) {
     const data = {
       Name: sheet.getCell(row, 0).value,
@@ -56,6 +56,14 @@ const fetchSheetData = async function (doc, range) {
   };
 };
 
+
+/**
+ * Find an item in the itemData array using a search query.
+ *
+ * @param {Array} itemData - Array of items to search through.
+ * @param {string} searchQuery - The search query to find the item.
+ * @returns {Object} - Object containing text and image_url properties of the found item.
+ */
 const findItem = async function (itemData, searchQuery) {
   const fuseOptions = {
     keys: ["Name"],
@@ -80,7 +88,12 @@ const findItem = async function (itemData, searchQuery) {
   };
 };
 
-function loadData() {
+/**
+ * Load data from a Google Spreadsheet using authentication and fetch the required sheet data.
+ *
+ * @returns {Promise<Array>} - A promise that resolves with the loaded sheet data.
+ */
+const loadData = function () {
   return new Promise(async (resolve, reject) => {
     try {
       const serviceAccountAuth = await google_authenticate();

@@ -13,6 +13,11 @@ if (BOT_TOKEN === undefined) {
 }
 const bot = new TelegramBot(BOT_TOKEN, {polling: true});
 
+/**
+ * Run the bot functionality to respond to messages from users.
+ *
+ * @param {Array} sheetData - Array of items to search through.
+ */
 const runBot = async (sheetData) => {
   bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
