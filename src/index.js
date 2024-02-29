@@ -35,6 +35,8 @@ const fetchSheetData = async function (doc, range) {
 // Load the specified range of cells
   await sheet.loadCells(range);
 
+  let dataArray = [];
+  
   for (let row = 1; row < SHEET_RANGE; row++) {
     const data = {
       Name: sheet.getCell(row, 0).value,
