@@ -13,44 +13,37 @@ if (BOT_TOKEN === undefined) {
 }
 const bot = new TelegramBot(BOT_TOKEN, {polling: true});
 
-let sheetData;
+const runBot = async (sheetData) => {
+  bot.on('message', async (msg) => {
+    const chatId = msg.chat.id;
+    const username = msg.from.username;
+    const messageText = msg.text;
 
-// Load data and handle messages
-loadData()
-  .then((data) => {
-    const sheetData = data;
+    const response = await findItem(sheetData, messageText);
 
-    bot.on('message', async (msg) => {
-      const chatId = msg.chat.id;
-      const username = msg.from.username;
-      const messageText = msg.text;
-
-      // Find the item in the cache
-      const response = await findItem(sheetData, messageText);
-
-      // Send the appropriate response based on whether an image is available
-      if (response.image_url) {
-        try {
-          await bot.sendPhoto(chatId, response.image_url, { caption: response.text });
-        } catch (error) {
-          await bot.sendMessage(chatId, response.text);
-        }
-      } else {
+    if (response.image_url) {
+      try {
+        await bot.sendPhoto(chatId, response.image_url, { caption: response.text });
+      } catch (error) {
         await bot.sendMessage(chatId, response.text);
       }
+    } else {
+      await bot.sendMessage(chatId, response.text);
+    }
 
-      // Log the message to the console
-      const timestamp = new Date().toLocaleString();
-      const logMessage = `[${timestamp}] Username: ${username}, Message: ${messageText}\n`;
-      console.log(logMessage);
+    const timestamp = new Date().toLocaleString();
+    const logMessage = `[${timestamp}] Username: ${username}, Message: ${messageText}\n`;
+    console.log(logMessage);
 
-      fs.appendFile('chat.log', logMessage, (err) => {
-        if (err) {
-          console.error("Error writing to log file: ", err);
-        }
-      });
+    fs.appendFile('chat.log', logMessage, (err) => {
+      if (err) {
+        console.error("Error writing to log file: ", err);
+      }
     });
-  })
-  .catch((error) => {
-    console.error("Error loading data:", error);
   });
+}
+
+(async () => {
+  const sheetData = await loadData();
+  runBot(sheetData);
+})();
