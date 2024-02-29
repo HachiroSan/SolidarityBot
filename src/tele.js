@@ -37,7 +37,7 @@ const runBot = async (sheetData) => {
     }
 
     const timestamp = new Date().toLocaleString();
-    const logMessage = `[${timestamp}] Username: ${username}, Message: ${messageText}\n`;
+    const logMessage = `[${timestamp}] Username: ${username}, Message: ${messageText}`;
     console.log(logMessage);
 
     fs.appendFile('chat.log', logMessage, (err) => {
